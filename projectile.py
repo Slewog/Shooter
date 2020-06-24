@@ -34,7 +34,6 @@ class Bullets(pygame.sprite.Sprite):
         for monster in self.player.game.check_collision(self, self.player.game.all_monsters):
             self.remove_bullets()
             monster.damage(self.player.attack)
-
         # If the position smaller than the window size.
         if self.rect.x + self.rect.width > self.window.get_width():
             self.remove_bullets()

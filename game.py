@@ -12,6 +12,7 @@ class Game:
         self.all_monsters = pygame.sprite.Group()  # Create a group of monsters.
         self.pressed = {}  # Dictionary for activated keys.
         self.spawn_monster()  # Creates an instance of the mummy class.
+        self.spawn_monster()
 
     # Check the collision between 2 sprites.
     def check_collision(self, sprite, sprite_group):

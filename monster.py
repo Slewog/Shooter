@@ -10,19 +10,21 @@ class Mummy(pygame.sprite.Sprite):
         self.window = window  # Game window.
         self.health = 100   # Mummy's life point.
         self.max_health = 100
-        self.attack = 5   # Mummy's attack point.
-        self.speed = 1  # Mummy's movement speed.
+        self.attack = 0.5   # Mummy's attack point.
+        self.speed = randint(1, 2)  # Mummy's movement speed.
         self.image = pygame.image.load('assets/mummy.png')  # Mummy's picture.
         self.rect = self.image.get_rect()  # Mummy's position.
-        self.rect.x = self.window.get_width() - self.rect.width / 3.5  # Mummy's starting position.
-        self.rect.y = 530
+        self.rect.x = self.window.get_width() - self.rect.width + randint(0, 135)  # Mummy's starting position.
+        self.rect.y = randint(610, 635)
 
     # Applies the damage.
     def damage(self, amount):
         self.health -= amount
         # If the life of the monster is equal to or less than 0, we make it reappear.
         if self.health <= 0:
-            self.rect.x = self.window.get_width() - self.rect.width / 3.5
+            self.rect.x = self.window.get_width() - self.rect.width + randint(0, 135)  # self.window.get_width() - self.rect.width / 3.5
+            self.rect.y = randint(610, 635)
+            self.speed = randint(1, 2)  # Mummy's movement speed.
             self.health = self.max_health
 
     # Update the life bar.
@@ -35,3 +37,5 @@ class Mummy(pygame.sprite.Sprite):
         # If the mummy is not in contact with a player.
         if not self.game.check_collision(self, self.game.all_players):
             self.rect.x -= self.speed
+        else:
+            self.game.player.damage(self.attack)

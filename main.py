@@ -1,22 +1,28 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import pygame  # Import of python modules.
-from game import Game  # Import of annex python files.
+import os  # Import of python modules.
+import sys
+import pygame
+from game import Game
 
+os.environ['SDL_VIDEO_WINDOW_POS'] = "150,150"
 pygame.init()  # Generate the game window.
-
-pygame.display.set_caption("Shooter")   # Window settings.
-game_window = pygame.display.set_mode((1280, 720))   # Window settings.
-background = pygame.image.load('assets/background.jpg')   # Window settings.
+pygame.display.set_caption("Shooter")  # Window title.
+game_window = pygame.display.set_mode((1400, 800))  # Window size.
+background = pygame.image.load('assets/background.jpg')  # Window logo.
+if sys.platform == 'win32':
+    pygame.display.set_icon(pygame.image.load("assets/logo.png"))  # Logo application if windows operating system.
 
 game = Game(game_window)  # Creates an instance of the game class.
 games_running = True  # Enables you to enter the game loop.
 
 # Game loop.
 while games_running:
-    game_window.blit(background, (0, -215))  # Apply the background image on the game window.
+    game_window.blit(background, (0, -130))  # Apply the background image on the game window.
     game_window.blit(game.player.image, game.player.rect)  # Apply player image.
+    game.player.update_health_bar(game_window)  # Displays the life bar of the player.
+    game.player.update_armor_bar(game_window)  # Displays the armor bar of the player.
 
     # Collect the projectiles.
     for projectile in game.player.all_projectiles:
@@ -24,8 +30,8 @@ while games_running:
 
     # Collect the monsters.
     for monster in game.all_monsters:
-        monster.forward()
-        monster.update_health_bar(game_window)
+        monster.forward()  # Move group of monsters.
+        monster.update_health_bar(game_window)  # Displays the life bar of the monsters.
 
     game.player.all_projectiles.draw(game_window)  # Apply player's projectile.
 
