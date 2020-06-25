@@ -11,10 +11,10 @@ class Bullets(pygame.sprite.Sprite):
         self.angle = 0  # Projectile's angle.
         self.image = pygame.image.load('assets/projectile.png')  # Projectile's picture.
         self.image = pygame.transform.scale(self.image, (35, 35))  # Set the size of the projectile.
-        self.origin_image = self.image
         self.rect = self.image.get_rect()  # Projectile's position.
         self.rect.x = player.rect.x + player.rect.width / 1.5  # Projectile's starting position.
         self.rect.y = player.rect.y + player.rect.height / 2
+        self.origin_image = self.image
 
     # Rotate the projectile while it is moving.
     def rotate_bullets(self):
