@@ -14,10 +14,11 @@ class Mummy(pygame.sprite.Sprite):
         self.max_boss_shield = 100
         self.attack = 0.7   # Mummy's attack point.
         self.speed = randint(1, 2)  # Mummy's movement speed.
-        self.image = pygame.image.load('assets/mummy.png')  # Mummy's picture.
-        self.rect = self.image.get_rect()  # Mummy's position.
-        self.rect.x = self.window.get_width() - self.rect.width + randint(0, 135)  # Mummy's starting position.
-        self.rect.y = randint(610, 635)
+        self.image = pygame.image.load('assets/alien.png')  # Boss picture.
+        self.image = pygame.transform.scale(self.image, (200, 200))  # Set the size of the projectile.
+        self.rect = self.image.get_rect()  # Boss position.
+        self.rect.x = self.window.get_width() - self.rect.width + randint(0, 135)  # Boss starting position.
+        self.rect.y = 560
 
     # Applies the damage.
     def damage(self, amount):
