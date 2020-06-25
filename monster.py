@@ -10,7 +10,9 @@ class Mummy(pygame.sprite.Sprite):
         self.window = window  # Game window.
         self.health = 100   # Mummy's life point.
         self.max_health = 100
-        self.attack = 0.5   # Mummy's attack point.
+        self.boss_shield = 100  # Monster's boss shield point.
+        self.max_boss_shield = 100
+        self.attack = 0.7   # Mummy's attack point.
         self.speed = randint(1, 2)  # Mummy's movement speed.
         self.image = pygame.image.load('assets/mummy.png')  # Mummy's picture.
         self.rect = self.image.get_rect()  # Mummy's position.
@@ -22,10 +24,14 @@ class Mummy(pygame.sprite.Sprite):
         self.health -= amount
         # If the life of the monster is equal to or less than 0, we make it reappear.
         if self.health <= 0:
-            self.rect.x = self.window.get_width() - self.rect.width + randint(0, 135)  # self.window.get_width() - self.rect.width / 3.5
+            self.rect.x = self.window.get_width() - self.rect.width + randint(0, 135)  # The mummy is returned to its starting position.
             self.rect.y = randint(610, 635)
-            self.speed = randint(1, 2)  # Mummy's movement speed.
-            self.health = self.max_health
+            self.speed = randint(1, 2)  # We define its new speed.
+            self.health = self.max_health  # We restore the hit points to 100%.
+            self.game.dead_monsters += 1  # The defeated monster counter is incremented by 1.
+            # If the monster counter arrives at the condition.
+            if self.game.dead_monsters == 100:
+                self.game.spawn_boss()  # Creates an instance of the Boss class.
 
     # Update the life bar.
     def update_health_bar(self, surface):
@@ -37,5 +43,52 @@ class Mummy(pygame.sprite.Sprite):
         # If the mummy is not in contact with a player.
         if not self.game.check_collision(self, self.game.all_players):
             self.rect.x -= self.speed
+        else:  # Applies damage to the player.
+            self.game.player.damage(self.attack)
+
+
+# Class of "Boss" type enemies.
+class Boss(pygame.sprite.Sprite):
+    def __init__(self, game, window):
+        super().__init__()
+        self.game = game  # Game class instance.
+        self.window = window  # Game window.
+        self.health = 100   # Boss life point.
+        self.max_health = 100
+        self.shield = 100  # Boss shield point.
+        self.max_shield = 100
+        self.attack = 1.0   # Boss attack point.
+        self.speed = 2  # Boss movement speed.
+        self.image = pygame.image.load('assets/mummy.png')  # Boss picture.
+        self.rect = self.image.get_rect()  # Boss position.
+        self.rect.x = self.window.get_width() - self.rect.width + randint(0, 135)  # Boss starting position.
+        self.rect.y = randint(610, 635)
+
+    # Applies the damage.
+    def damage(self, amount):
+        if self.shield > 0:
+            self.shield -= amount  # We subtract the damage to shield points.
+        # self.health -= amount
         else:
+            # If the life of the boss is equal to or less than 0, we make it reappear.
+            if self.health - amount > amount:
+                self.health -= amount  # We subtract the damage to hit points.
+            else:  # Game over.
+                self.game.game_win()
+
+    # Update the life bar.
+    def update_health_bar(self, surface):
+        pygame.draw.rect(surface, (57, 57, 57), [self.rect.x + 13, self.rect.y - 10, self.max_health, 5])  # Applies the maximum life bar.
+        pygame.draw.rect(surface, (255, 0, 0), [self.rect.x + 13, self.rect.y - 10, self.health, 5])  # Applies the life bar.
+
+    # Update the shield bar.
+    def update_shield_bar(self, surface):
+        pygame.draw.rect(surface, (0, 0, 255), [self.rect.x + 13, self.rect.y - 10, self.shield, 5])  # Applies the shield bar.
+
+    # Moves the boss to the left.
+    def forward(self):
+        # If the boss is not in contact with a player.
+        if not self.game.check_collision(self, self.game.all_players):
+            self.rect.x -= self.speed
+        else:  # Applies damage to the player.
             self.game.player.damage(self.attack)
