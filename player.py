@@ -31,7 +31,7 @@ class Survivor(pygame.sprite.Sprite):
             if self.health - amount > amount:
                 self.health -= amount
             else:
-                print('You are dead')
+                self.game.game_over()
 
     # Update the life bar.
     def update_health_bar(self, surface):
