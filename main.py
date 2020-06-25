@@ -19,6 +19,9 @@ banner = pygame.transform.scale(banner, (600, 600))  # Set the size of the banne
 banner_rect = banner.get_rect()  # Get position.
 banner_rect.x = ceil(game_window.get_width() / 3.5)  # Defines the X position of the banner.
 banner_rect.y = -50  # Defines the Y position.
+font = pygame.font.Font('assets/fonts/Kid Games.ttf', 24)  # Copyright Label Font.
+pos_copyright_x = ceil(game_window.get_width() / 2.5)  # Score Label copyright position.
+pos_copyright_y = 750
 button_play = pygame.image.load('assets/button.png')  # Import button play.
 button_play = pygame.transform.scale(button_play, (500, 200))  # Set the size of the button.
 button_play_rect = button_play.get_rect()  # Get position.
@@ -29,9 +32,6 @@ if sys.platform == 'win32':  # Logo application if windows operating system.
 
 game = Game(game_window)  # Creates an instance of the game class.
 games_running = True  # Enables you to enter the game loop.
-font = pygame.font.Font('assets/fonts/Kid Games.ttf', 24)  # Copyright Label Font.
-pos_copyright_x = ceil(game_window.get_width() / 2.5)  # Score Label copyright position.
-pos_copyright_y = 750
 
 # Game loop.
 while games_running:
